@@ -25,6 +25,40 @@ func (comps *CompanyService) CreateCompany(c *gin.Context) (Entity.Company, erro
 		return Entity.Company{}, errors.New(err.Error())
 	}
 
+	switch (company.Type) {
+		case "Corporations":
+			break;
+		case "NonProfit":
+			break;
+		case "Cooperative": 
+			break;
+		case "Sole Proprietorship":
+			break;
+		default: 
+			return Entity.Company{}, errors.New("type must be one of the following Corporations, NonProfit, Cooperative or Sole Proprietorship")
+	}
+
+	if len(company.CompanyUuid) < 10 {
+		return Entity.Company{}, errors.New("companyUuid is required, it has to be a string, minimum of 10 characters")
+	}
+
+	if len(company.CompanyName) != 15 {
+		return Entity.Company{}, errors.New("companyName is required, it has to be a string of 15 characters")
+	}
+
+	if len(company.Description) > 3000 {
+		return Entity.Company{}, errors.New("description cannot be greater than 3000 characters")
+	}
+
+	comp, errCC := companyRepo.GetCompanyByUuid(company.CompanyUuid);
+	if errCC != nil {
+		return Entity.Company{}, errors.New(errCC.Error());
+	}
+
+	if comp.Id != 0 {
+		return Entity.Company{}, errors.New(strings.Join([]string{"company with uuid ", fmt.Sprint(comp.CompanyUuid), " already exits"}, ""));
+	}
+
 	company.CreatedDate = time.Now();
 	company.CreatedBy = "Admin";
 	company.LastActivityBy = "Admin";
@@ -46,7 +80,32 @@ func (comps *CompanyService) PatchCompany(c *gin.Context) (Entity.Company, error
 		return Entity.Company{}, errors.New(err.Error())
 	}
 
-	company, errC := companyRepo.GetCompany(acompany.Id);
+	switch (acompany.Type) {
+		case "Corporations":
+			break;
+		case "NonProfit":
+			break;
+		case "Cooperative": 
+			break;
+		case "Sole Proprietorship":
+			break;
+		default: 
+			return Entity.Company{}, errors.New("type must be one of the following Corporations, NonProfit, Cooperative or Sole Proprietorship")
+	}
+
+	if len(acompany.CompanyUuid) < 10 {
+		return Entity.Company{}, errors.New("companyUuid is required, it has to be a string, minimum of 10 characters")
+	}
+
+	if len(acompany.CompanyName) != 15 {
+		return Entity.Company{}, errors.New("companyName is required, it has to be a string of 15 characters")
+	}
+
+	if len(acompany.Description) > 3000 {
+		return Entity.Company{}, errors.New("description cannot be greater than 3000 characters")
+	}
+
+	company, errC := companyRepo.GetCompanyId(acompany.Id);
     if errC != nil {
 		return Entity.Company{}, errors.New(errC.Error());
 	}
@@ -79,7 +138,7 @@ func (comps *CompanyService) DeleteCompany(c *gin.Context) (error) {
 		return errors.New(err.Error())
 	}
 
-	company, err := companyRepo.GetCompany(acompany.Id);
+	company, err := companyRepo.GetCompanyId(acompany.Id);
     if err != nil {
 		return errors.New(err.Error());
 	}
@@ -112,7 +171,7 @@ func (comps *CompanyService) GetCompany(c *gin.Context) (Entity.Company, error) 
 		return Entity.Company{}, errors.New(errU.Error());
 	}
 
-	company, err := companyRepo.GetCompany(int32(id));
+	company, err := companyRepo.GetCompanyId(int32(id));
     if err != nil {
 		return Entity.Company{}, errors.New(err.Error());
 	}
