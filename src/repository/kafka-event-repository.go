@@ -1,0 +1,44 @@
+package repository
+
+import (
+	"gorm.io/gorm"
+	Entity "xmservice.com/entity"
+	Migration "xmservice.com/migration"
+	"errors"
+)
+
+var dtBK Migration.Migration = &Migration.MigrationService{};
+
+type KafkaEventRepository interface {
+	CreateKafkaEvent(kafkaEvent Entity.KafkaEvent) error 
+}
+
+type KafkaEventRepo struct {
+    
+}
+
+func (kafk *KafkaEventRepo) CreateKafkaEvent(kafkaEvent Entity.KafkaEvent) error {
+	var database *gorm.DB = dtBK.ConnectToDb();
+	dbError := database.Create(&kafkaEvent).Error;
+	if dbError != nil {
+		return errors.New(dbError.Error());
+	}
+
+	return nil;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
