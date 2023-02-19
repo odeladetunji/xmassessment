@@ -36,10 +36,10 @@ services:
       - POSTGRES_PASSWORD=xmpass
       - POSTGRES_USER=xmuser
       - POSTGRES_DB=xm-company-db
-      - POSTGRES_HOST_AUTH_METHOD=all
+      - POSTGRES_HOST_AUTH_METHOD=trust
   app:
     image: 'golang:1.20'
-    command: sh -c "go run ."
+    command: sh -c "go run . &> output.log &"
     networks:
       - app-tier
     ports:
