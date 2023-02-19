@@ -7,5 +7,5 @@ Assessment
 ## you can also run it in the background with the following command
 ####.     docker -compose up -d
 #### move to the src directory and run the folowing
-######. go run .
+####  go run .
 #### this will start the microservice.
