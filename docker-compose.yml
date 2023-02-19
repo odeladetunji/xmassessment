@@ -36,7 +36,7 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
   app:
     image: 'golang:1.20'
-    command: sh -c "go run . &> output.log &"
+    command: sh -c "go run ."
     networks:
       - app-tier
     ports:
