@@ -33,7 +33,7 @@ func (kafk *KafkaEventRepo) GetAllKafkaEvents() ([]Entity.KafkaEvent, error){
 	var kafkaEventList []Entity.KafkaEvent;
 	dbError := database.Find(&kafkaEventList).Error;
 	if dbError != nil {
-		return []Entity.KafkaEvent, errors.New(dbError.Error());
+		return []Entity.KafkaEvent{}, errors.New(dbError.Error());
 	}
 
 	return kafkaEventList, nil;

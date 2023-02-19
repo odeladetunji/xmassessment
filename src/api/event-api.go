@@ -17,7 +17,7 @@ type EventApi struct {
 func (event *EventApi) Router(router *gin.Engine){
 	var route *gin.RouterGroup = router.Group("/api/events");
 	var eventApi EventApi;
-    eventApi.CreateCompany(route);
+    eventApi.GetAllKafkaEvents(route);
 }
 
 func (event *EventApi) GetAllKafkaEvents(route *gin.RouterGroup){
