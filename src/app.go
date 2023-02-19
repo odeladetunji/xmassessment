@@ -4,7 +4,7 @@ import (
 	"log"
 	"github.com/gin-gonic/gin"
 	Endless "github.com/fvbock/endless"
-	// KafkaService "mh.com/kafkaservices"
+	KafkaService "xmservice.com/kafka"
 	Api "xmservice.com/api"
 	// Migration "xmservice.com/migration"
 )
@@ -24,11 +24,11 @@ func main(){
 	router.MaxMultipartMemory = 32 << 20;
 
 	//KAFKA SERVICE;
-	// var kafkaService KafkaService.KafkaService;
-	// kafkaService.CreateKafKaTopic();
+	var kafkaService KafkaService.KafkaService;
+	kafkaService.CreateKafKaTopic();
 
-	// var kafkaMotherBoardService KafkaService.KafkaMotherBoardService;
-	// kafkaMotherBoardService.CreateKafKaTopicForMotherBoardApp();
+	var kafkaMotherBoardService KafkaService.KafkaMotherBoardService;
+	kafkaMotherBoardService.CreateKafKaTopicForMotherBoardApp();
 
 	setRoutes := func(){
 		var companyApi Api.CompanyApi;
