@@ -8,7 +8,7 @@ import (
 	Api "xmservice.com/api"
 	"github.com/joho/godotenv"
 	"os"
-	// Migration "xmservice.com/migration"
+	Migration "xmservice.com/migration"
 )
 
 func main(){
@@ -16,12 +16,12 @@ func main(){
     router := gin.Default();
 	router.MaxMultipartMemory = 100 << 20  // 50 MiB
 
-	// migrateDatabase :=  func(){
-	// 	var migration Migration.Migration = &Migration.MigrationService{}
-	// 	migration.MigrateTables();
-	// } 
+	migrateDatabase :=  func(){
+		var migration Migration.Migration = &Migration.MigrationService{}
+		migration.MigrateTables();
+	} 
 
-	// migrateDatabase();
+	migrateDatabase();
 
 	router.MaxMultipartMemory = 32 << 20;
 

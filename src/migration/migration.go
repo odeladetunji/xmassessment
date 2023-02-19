@@ -27,7 +27,7 @@ func (migration *MigrationService) MigrateTables() *gorm.DB {
 		log.Fatal("Error loading .env file")
 	}
 
-	var connectionString string = "host=" + os.Getenv("POSTGRES_HOST") + " " + "user=" + os.Getenv("POSTGRES_USER") + " " + "password=" + os.Getenv("POSTGRES_PASSWORD") + " " + "dbname=" + os.Getenv("POSTGRES_DB")
+	var connectionString string = os.Getenv("POSTGRES_HOST") + "/" + os.Getenv("POSTGRES_DB")
 	// dsn := "host=db-postgresql-sfo3-21964-nov-29-backup-do-user-9772821-0.b.db.ondigitalocean.com user=mh-production password=AVNS_RB0gik8akCPKDtOVoPB dbname=mh-production-db port=25060 sslmode=require TimeZone=UTC";
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN: connectionString,
@@ -58,7 +58,7 @@ func (migration *MigrationService) ConnectToDb() *gorm.DB {
 		log.Fatal("Error loading .env file")
 	}
 
-	var connectionString string = os.Getenv("POSTGRES_HOST") + "/" + os.Getenv("POSTGRES_DB") + "&sslmode=" + os.Getenv("SSLMOD");
+	var connectionString string = os.Getenv("POSTGRES_HOST") + "/" + os.Getenv("POSTGRES_DB")
 	// + "user=" + os.Getenv("POSTGRES_USER") + " " + "password=" + os.Getenv("POSTGRES_PASSWORD") + " " + "dbname=" + os.Getenv("POSTGRES_DB")
 	// dsn := "host=db-postgresql-sfo3-21964-nov-29-backup-do-user-9772821-0.b.db.ondigitalocean.com user=mh-production password=AVNS_RB0gik8akCPKDtOVoPB dbname=mh-production-db port=25060 sslmode=require TimeZone=UTC";
     db, err := gorm.Open(postgres.New(postgres.Config{

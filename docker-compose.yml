@@ -33,9 +33,6 @@ services:
     networks:
       - app-tier
     environment:
-      - POSTGRES_PASSWORD=xmpass
-      - POSTGRES_USER=xmuser
-      - POSTGRES_DB=xm-company-db
       - POSTGRES_HOST_AUTH_METHOD=trust
   app:
     image: 'golang:1.20'
@@ -48,7 +45,7 @@ services:
     volumes:
       - ./:/src
     environment:
-      - POSTGRES_PASSWORD=xmpass
+      - POSTGRES_PASSWORD=xmpassuyrows
       - POSTGRES_USER=xmuser
       - POSTGRES_DB=xm-company-db
     depends_on:
