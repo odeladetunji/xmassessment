@@ -4,9 +4,12 @@ import (
 	Kafka "github.com/segmentio/kafka-go"
 	Repository "xmservice.com/repository"
 	Entity "xmservice.com/entity"
+	"os"
 	JSON "encoding/json"
+	"log"
 	"fmt"
 	"context"
+	"github.com/joho/godotenv"
 )
 
 type KafkaRecieverService struct {
@@ -30,7 +33,13 @@ func (kaf *KafkaRecieverService) ConnectToKafka(kafkaURL string, topic string) *
 
 func (kaf *KafkaRecieverService) ConsumeKafkaTopic(){
 	
-	var kafkaURL string = "143.198.143.199:9092";
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	// var kafkaURL string = "143.198.143.199:9092";
+	var kafkaURL string = os.Getenv("KAFKA_SERVER")
 	var topic string = "xmservices-kafkaEvents";
 	var kafkaReader *Kafka.Reader = kafkaService.ConnectToKafka(kafkaURL, topic);
 

@@ -6,6 +6,8 @@ import (
 	Endless "github.com/fvbock/endless"
 	KafkaService "xmservice.com/kafka"
 	Api "xmservice.com/api"
+	"github.com/joho/godotenv"
+	"os"
 	// Migration "xmservice.com/migration"
 )
 
@@ -38,8 +40,14 @@ func main(){
 	}
 
     setRoutes();
-	
-	if err := Endless.ListenAndServe("localhost:8090", router); err != nil {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	var host string = "localhost:" + os.Getenv("LISTENING_PORT");
+	if err := Endless.ListenAndServe(host, router); err != nil {
 		log.Fatal("Failed run app: ", err)
 	}
 

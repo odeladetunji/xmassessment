@@ -3,9 +3,12 @@ package kafkaservice;
 import (
 	Kafka "github.com/segmentio/kafka-go"
 	Entity "xmservice.com/entity"
+	"github.com/joho/godotenv"
 	"context"
 	"errors"
 	"strconv"
+	"os"
+	"log"
 	"net"
 	JSON "encoding/json"
 )
@@ -38,8 +41,13 @@ func (kaf *KafkaService) KafkaProducerCreateKafkaEvent(kafkaWriter *Kafka.Writer
 }
 
 func (kaf *KafkaService) PushToKafkaProducer(kafkaEvent *Entity.KafkaEvent, topicType string) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
-	var kafkaUrl string = "143.198.143.199:9092";
+	// var kafkaUrl string = "143.198.143.199:9092";
+	var kafkaURL string = os.Getenv("KAFKA_SERVER");
 	var topic string = "xmservices-kafkaEvents";
 	var key string;
 	var byteArray []byte;
@@ -56,7 +64,7 @@ func (kaf *KafkaService) PushToKafkaProducer(kafkaEvent *Entity.KafkaEvent, topi
 
 	//Create Connection
 	var kafkaService KafkaService;
-	kafkaWriter := kafkaService.CreateKafkaConnection(kafkaUrl, topic);
+	kafkaWriter := kafkaService.CreateKafkaConnection(kafkaURL, topic);
 	defer kafkaWriter.Close();
 
 	//Push to Producer
@@ -65,8 +73,14 @@ func (kaf *KafkaService) PushToKafkaProducer(kafkaEvent *Entity.KafkaEvent, topi
 }
 
 func (kaf *KafkaService) checkIfTopicExists(topic string) (bool, error){
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
-	conn, err := Kafka.Dial("tcp", "143.198.143.199:9092");
+	// var kafkaUrl string = "143.198.143.199:9092";
+	var kafkaURL string = os.Getenv("KAFKA_SERVER")
+	conn, err := Kafka.Dial("tcp", kafkaURL);
 	if err != nil {
 		return false, errors.New(err.Error());
 	}
@@ -104,7 +118,14 @@ func (kaf *KafkaService) CreateKafKaTopic(){
 		}
 
 		if errTop == nil && !topicIsPresent {
-			conn, err := Kafka.Dial("tcp", "143.198.143.199:9092")
+			err := godotenv.Load()
+			if err != nil {
+				log.Fatal("Error loading .env file")
+			}
+
+	       // var kafkaUrl string = "143.198.143.199:9092";
+		    var kafkaURL string = os.Getenv("KAFKA_SERVER")
+			conn, err := Kafka.Dial("tcp", kafkaURL)
 			if err != nil {
 				panic(err.Error())
 			}

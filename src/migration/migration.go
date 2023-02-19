@@ -5,8 +5,10 @@ import (
 	"time"
     "fmt"
 	"log"
+	"os"
     "gorm.io/driver/postgres"
     "gorm.io/gorm"
+	"github.com/joho/godotenv"
 )
 
 type Migration interface {
@@ -20,9 +22,15 @@ type MigrationService struct {
 
 func (migration *MigrationService) MigrateTables() *gorm.DB {
 
-	dsn := "host=db-postgresql-sfo3-21964-nov-29-backup-do-user-9772821-0.b.db.ondigitalocean.com user=mh-production password=AVNS_RB0gik8akCPKDtOVoPB dbname=mh-production-db port=25060 sslmode=require TimeZone=UTC";
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	var connectionString string = "host=" + os.Getenv("POSTGRES_HOST") + " " + "user=" + os.Getenv("POSTGRES_USER") + " " + "password=" + os.Getenv("POSTGRES_PASSWORD") + " " + "dbname=" + os.Getenv("POSTGRES_DB")
+	// dsn := "host=db-postgresql-sfo3-21964-nov-29-backup-do-user-9772821-0.b.db.ondigitalocean.com user=mh-production password=AVNS_RB0gik8akCPKDtOVoPB dbname=mh-production-db port=25060 sslmode=require TimeZone=UTC";
 	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN: dsn,
+		DSN: connectionString,
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
     }), &gorm.Config{})
 
@@ -45,9 +53,16 @@ func (migration *MigrationService) MigrateTables() *gorm.DB {
 
 func (migration *MigrationService) ConnectToDb() *gorm.DB {
 	
-	dsn := "host=db-postgresql-sfo3-21964-nov-29-backup-do-user-9772821-0.b.db.ondigitalocean.com user=mh-production password=AVNS_RB0gik8akCPKDtOVoPB dbname=mh-production-db port=25060 sslmode=require TimeZone=UTC";
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	var connectionString string = os.Getenv("POSTGRES_HOST") + "/" + os.Getenv("POSTGRES_DB") + "&sslmode=" + os.Getenv("SSLMOD");
+	// + "user=" + os.Getenv("POSTGRES_USER") + " " + "password=" + os.Getenv("POSTGRES_PASSWORD") + " " + "dbname=" + os.Getenv("POSTGRES_DB")
+	// dsn := "host=db-postgresql-sfo3-21964-nov-29-backup-do-user-9772821-0.b.db.ondigitalocean.com user=mh-production password=AVNS_RB0gik8akCPKDtOVoPB dbname=mh-production-db port=25060 sslmode=require TimeZone=UTC";
     db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN: dsn,
+		DSN: connectionString,
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
     }), &gorm.Config{});
 
