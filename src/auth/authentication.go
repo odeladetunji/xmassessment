@@ -7,7 +7,7 @@ import (
 	"errors"
 	"net/http"
 	"time"
-	"fmt"
+	// "fmt"
 	"strings"
 )
 
@@ -59,9 +59,20 @@ func (authen *AuthenticationService) CreateToken(c *gin.Context) (string, error)
 func (authen *AuthenticationService) ValidateToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		
+		if strings.Contains(c.Request.URL.Path, "/api/company/id") {
+			c.Next();
+			return;
+		}
+
 		var auth string = c.Request.Header.Get("Authorization");
+		if len(auth) == 0 {
+			c.String(http.StatusUnauthorized, "Unauthorized")
+			c.Abort();
+			return
+	    }
+
 		var token string = strings.Split(auth, " ")[1];
-		
+
 		if len(token) == 0 {
 			c.String(http.StatusUnauthorized, "Unauthorized")
 			c.Abort();

@@ -74,7 +74,7 @@ func (comA *CompanyApi) PatchCompany(route *gin.RouterGroup){
 func (comA *CompanyApi) DeleteCompany(route *gin.RouterGroup){
 	route.DELETE("/delete", func(c *gin.Context) {
 
-		_, err := companyService.PatchCompany(c);
+		err := companyService.DeleteCompany(c);
 		if err != nil {
 			c.JSON(500, gin.H{
 				"message": err.Error(),
