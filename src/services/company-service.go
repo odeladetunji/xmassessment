@@ -61,6 +61,15 @@ func (comps *CompanyService) CreateCompany(c *gin.Context) (Entity.Company, erro
 		return Entity.Company{}, errors.New(strings.Join([]string{"company with uuid ", fmt.Sprint(comp.CompanyUuid), " already exits"}, ""));
 	}
 
+	acomp, errN := companyRepo.GetCompanyName(company.CompanyName)
+	if errN != nil {
+		return Entity.Company{}, errors.New(errN.Error());
+	}
+
+	if acomp.Id != 0 {
+		return Entity.Company{}, errors.New(strings.Join([]string{"a different company with name ", acomp.CompanyName, " already exits"}, ""));
+	}
+
 	company.CreatedDate = time.Now();
 	company.CreatedBy = "Admin";
 	company.LastActivityBy = "Admin";
@@ -133,6 +142,17 @@ func (comps *CompanyService) PatchCompany(c *gin.Context) (Entity.Company, error
 		return Entity.Company{}, errors.New(strings.Join([]string{"company with id ", fmt.Sprint(acompany.Id), "does not exits"}, ""));
 	}
 
+	acomp, errN := companyRepo.GetCompanyName(company.CompanyName)
+	if errN != nil {
+		return Entity.Company{}, errors.New(errN.Error());
+	}
+
+	if acomp.Id != 0 {
+		if acomp.Id != company.Id {
+			return Entity.Company{}, errors.New("a different company with that name already exists")
+		}
+	}
+	
 	company.Description = acompany.Description;
 	company.CompanyName = acompany.CompanyName;
 	company.NumberOfEmployees = acompany.NumberOfEmployees;

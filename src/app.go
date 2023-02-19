@@ -35,8 +35,12 @@ func main(){
 	setRoutes := func(){
 		var companyApi Api.CompanyApi;
 		var authApi Api.AuthApi;
+		var eventApi Api.EventApi;
+
 		companyApi.Router(router);
-		authApi.Router(router)
+		authApi.Router(router);
+		eventApi.Router(router);
+		
 	}
 
     setRoutes();

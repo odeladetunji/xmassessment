@@ -14,6 +14,7 @@ type CompanyRepository interface {
 	UpdateCompany(company Entity.Company) (Entity.Company, error)
 	GetCompanyId(id int32) (Entity.Company, error)
 	GetCompanyByUuid(companyUuid string) (Entity.Company, error)
+	GetCompanyName(companyName string) (Entity.Company, error)
 }
 
 type CompanyRepo struct {
@@ -55,6 +56,17 @@ func (comp *CompanyRepo) GetCompanyByUuid(companyUuid string) (Entity.Company, e
 	var database *gorm.DB = dBs.ConnectToDb();
 	var company Entity.Company;
 	dbError := database.Where(&Entity.Company{CompanyUuid: companyUuid}).Find(&company).Error;
+	if dbError != nil {
+		return Entity.Company{}, errors.New(dbError.Error());
+	}
+
+	return company, nil;
+}
+
+func (comp *CompanyRepo) GetCompanyName(companyName string) (Entity.Company, error){
+	var database *gorm.DB = dBs.ConnectToDb();
+	var company Entity.Company;
+	dbError := database.Where(&Entity.Company{CompanyName: companyName}).Find(&company).Error;
 	if dbError != nil {
 		return Entity.Company{}, errors.New(dbError.Error());
 	}

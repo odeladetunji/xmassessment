@@ -11,6 +11,7 @@ var dtBK Migration.Migration = &Migration.MigrationService{};
 
 type KafkaEventRepository interface {
 	CreateKafkaEvent(kafkaEvent Entity.KafkaEvent) error 
+	GetAllKafkaEvents() ([]Entity.KafkaEvent, error)
 }
 
 type KafkaEventRepo struct {
@@ -26,6 +27,19 @@ func (kafk *KafkaEventRepo) CreateKafkaEvent(kafkaEvent Entity.KafkaEvent) error
 
 	return nil;
 }
+
+func (kafk *KafkaEventRepo) GetAllKafkaEvents() ([]Entity.KafkaEvent, error){
+	var database *gorm.DB = dtBK.ConnectToDb();
+	var kafkaEventList []Entity.KafkaEvent;
+	dbError := database.Find(&kafkaEventList).Error;
+	if dbError != nil {
+		return []Entity.KafkaEvent, errors.New(dbError.Error());
+	}
+
+	return kafkaEventList, nil;
+}
+
+
 
 
 
