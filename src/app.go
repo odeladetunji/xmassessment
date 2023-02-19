@@ -6,7 +6,7 @@ import (
 	Endless "github.com/fvbock/endless"
 	// KafkaService "mh.com/kafkaservices"
 	Api "xmservice.com/api"
-	// Migration "mh.com/migration"
+	// Migration "xmservice.com/migration"
 )
 
 func main(){
@@ -32,7 +32,9 @@ func main(){
 
 	setRoutes := func(){
 		var companyApi Api.CompanyApi;
+		var authApi Api.AuthApi;
 		companyApi.Router(router);
+		authApi.Router(router)
 	}
 
     setRoutes();

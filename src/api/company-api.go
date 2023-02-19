@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"time"
 	"net/http"
+	// Auth "xmservice.com/auth"
 )
 
 var companyService CompanyService.CompanyService;
@@ -15,9 +16,12 @@ type CompanyApi struct {
 
 func (comA *CompanyApi) Router(router *gin.Engine){
 	var route *gin.RouterGroup = router.Group("/api/company");
+	route.Use(authenticationService.ValidateToken());
 	var companyApi CompanyApi;
     companyApi.CreateCompany(route);
 	companyApi.DeleteCompany(route);
+	companyApi.PatchCompany(route);
+	companyApi.GetCompany(route);
 	
 }
 
