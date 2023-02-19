@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	Repository "xmservice.com/repository"
 	Entity "xmservice.com/entity"
+	KafkaService "xmservice.com/kafka"
+	JSON "encoding/json"
 	"errors"
 	"strings"
 	"fmt"
@@ -69,6 +71,23 @@ func (comps *CompanyService) CreateCompany(c *gin.Context) (Entity.Company, erro
 		return Entity.Company{}, errors.New(errC.Error());
 	}
 
+	jsonString, errJ := JSON.Marshal(company);
+	if errJ != nil {
+		return  Entity.Company{}, errors.New(errJ.Error());
+	}
+
+	//EVENTS FOR KAFKA
+	var kafkaEvent Entity.KafkaEvent;
+	kafkaEvent.Type = "CREATE"
+	kafkaEvent.Data = string(jsonString);
+	kafkaEvent.CreatedDate = time.Now();
+	kafkaEvent.CreatedBy = "Admin";
+	kafkaEvent.LastActivityBy = "Admin";
+	kafkaEvent.LastActivityDate = time.Now();
+
+	var kafkaService KafkaService.KafkaService;
+	kafkaService.PushToKafkaProducer(&kafkaEvent, "CREATE-KAFKA-EVENTS");
+
 	return company, nil;
 
 }
@@ -122,6 +141,23 @@ func (comps *CompanyService) PatchCompany(c *gin.Context) (Entity.Company, error
 	company.LastActivityBy = "Admin";
 	company.LastActivityDate = time.Now();
 
+	jsonString, errJ := JSON.Marshal(company);
+	if errJ != nil {
+		return  Entity.Company{}, errors.New(errJ.Error());
+	}
+
+	//EVENTS FOR KAFKA
+	var kafkaEvent Entity.KafkaEvent;
+	kafkaEvent.Type = "PATCH"
+	kafkaEvent.Data = string(jsonString);
+	kafkaEvent.CreatedDate = time.Now();
+	kafkaEvent.CreatedBy = "Admin";
+	kafkaEvent.LastActivityBy = "Admin";
+	kafkaEvent.LastActivityDate = time.Now();
+
+	var kafkaService KafkaService.KafkaService;
+	kafkaService.PushToKafkaProducer(&kafkaEvent, "CREATE-KAFKA-EVENTS");
+
 	company, errI := companyRepo.UpdateCompany(company);
     if errI != nil {
 		return Entity.Company{}, errors.New(errI.Error());
@@ -155,6 +191,23 @@ func (comps *CompanyService) DeleteCompany(c *gin.Context) (error) {
     if err != nil {
 		return errors.New(err.Error());
 	}
+
+	jsonString, errJ := JSON.Marshal(company);
+	if errJ != nil {
+		return errors.New(errJ.Error());
+	}
+
+	//EVENTS FOR KAFKA
+	var kafkaEvent Entity.KafkaEvent;
+	kafkaEvent.Type = "DELETE"
+	kafkaEvent.Data = string(jsonString);
+	kafkaEvent.CreatedDate = time.Now();
+	kafkaEvent.CreatedBy = "Admin";
+	kafkaEvent.LastActivityBy = "Admin";
+	kafkaEvent.LastActivityDate = time.Now();
+
+	var kafkaService KafkaService.KafkaService;
+	kafkaService.PushToKafkaProducer(&kafkaEvent, "CREATE-KAFKA-EVENTS");
 
 	return nil;
 

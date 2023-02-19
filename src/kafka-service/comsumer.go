@@ -28,7 +28,7 @@ func (kaf *KafkaRecieverService) ConnectToKafka(kafkaURL string, topic string) *
 	});
 }
 
-func (kaf *KafkaRecieverService) ConsumeKafkaTopicForMotherBoardService(){
+func (kaf *KafkaRecieverService) ConsumeKafkaTopic(){
 	
 	var kafkaURL string = "143.198.143.199:9092";
 	var topic string = "xmservices-kafkaEvents";
@@ -51,8 +51,8 @@ func (kaf *KafkaRecieverService) ConsumeKafkaTopicForMotherBoardService(){
 				if mErr != nil {
 					errorKaf = mErr; 
 				}
-			
-				data, errD := kafkaEventRepo.CreateKafkaEvent(kafkaEvent);
+
+				errD := kafkaEventRepo.CreateKafkaEvent(kafkaEvent);
 				if errD != nil {
 					errorKaf = errD; 
 				}

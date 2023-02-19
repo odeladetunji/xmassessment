@@ -27,8 +27,8 @@ func main(){
 	var kafkaService KafkaService.KafkaService;
 	kafkaService.CreateKafKaTopic();
 
-	var kafkaMotherBoardService KafkaService.KafkaMotherBoardService;
-	kafkaMotherBoardService.CreateKafKaTopicForMotherBoardApp();
+	var kafkaRecieverService KafkaService.KafkaRecieverService;
+	go kafkaRecieverService.ConsumeKafkaTopic();
 
 	setRoutes := func(){
 		var companyApi Api.CompanyApi;
