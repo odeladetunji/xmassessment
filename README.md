@@ -9,3 +9,5 @@ Install docker on your machine.
 ##### move to the src directory and run the folowing
 #####  go run .
 ##### this will start the microservice.
+##### the link below is the postman collection containing the various endpoint of the project
+#####  https://documenter.getpostman.com/view/2630186/2s93CHvFCR
